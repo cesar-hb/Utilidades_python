@@ -1,0 +1,134 @@
+def menu():
+    print('1. Add matrices', '2. Multiply matrix by a constant',
+          '3. Multiply matrices', '4. Transpose matrix', '0. Exit', sep='\n')
+    option = input('Your choice: ')
+    if option == '1':
+        matrix_addition()
+    elif option == '2':
+        matrix_constant()
+    elif option == '3':
+        matrix_multiply()
+    elif option == '4':
+        print('1. Main diagonal', '2. Side diagonal',
+              '3. Vertical line', '4. Horizontal line', sep='\n')
+        matrix_transpose(input('Your choice: '))
+    elif option == '0':
+        exit()
+
+
+def output(processed_matrix):
+    print('The result is:')
+    for line in processed_matrix:
+        print(' '.join(map(str, line)))
+    print('\n')
+    return menu()
+
+## Me gustaria definir esta funcion como la unica que crea matrices,
+## para asi no definirlas dentro de cada funcion.
+# def matrix():
+#     row, column = input().split()
+#     array = []
+#     for i in range(0, int(row)):
+#         array.append(input().split())
+#     return array
+
+
+def matrix_addition():
+    row_one, column_one = input('Enter size of first matrix: ').split()
+    matrix_one = []
+    print('Enter first matrix:')
+    for i in range(0, int(row_one)):
+        matrix_one.append(input().split())
+    row_two, column_two = input('Enter size of second matrix: ').split()
+    matrix_two = []
+    print('Enter second matrix:')
+    for i in range(0, int(row_two)):
+        matrix_two.append(input().split())
+    if row_one != row_two or column_one != column_two:
+        print('The operation cannot be performed.\n')
+        return menu()
+    else:
+        matrix_sum = []
+        for i in range(0, len(matrix_one)):
+            row_result = []
+            for j in range(0, len(matrix_one[0])):
+                try:
+                    sum_value = int(matrix_one[i][j]) + int(matrix_two[i][j])
+                except ValueError:
+                    sum_value = float(matrix_one[i][j]) + float(matrix_two[i][j])
+                row_result.append(sum_value)
+            matrix_sum.append(row_result)
+        return output(matrix_sum)
+
+
+def matrix_constant():
+    row_one, column_one = input('Enter size of matrix: ').split()
+    matrix_one = []
+    print('Enter matrix:')
+    for i in range(0, int(row_one)):
+        matrix_one.append(input().split())
+    constant = input('Enter constant: ')
+    matrix_result = []
+    for i in range(0, len(matrix_one)):
+        row_result = []
+        for j in range(0, len(matrix_one[0])):
+            try:
+                object_multiplication = int(matrix_one[i][j]) * int(constant)
+            except ValueError:
+                object_multiplication = float(matrix_one[i][j]) * float(constant)
+            row_result.append(object_multiplication)
+        matrix_result.append(row_result)
+    return output(matrix_result)
+
+
+def matrix_multiply():
+    row_one, column_one = input('Enter size of first matrix: ').split()
+    matrix_one = []
+    print('Enter first matrix:')
+    for i in range(0, int(row_one)):
+        matrix_one.append(input().split())
+    row_two, column_two = input('Enter size of second matrix: ').split()
+    matrix_two = []
+    print('Enter second matrix:')
+    for i in range(0, int(row_two)):
+        matrix_two.append(input().split())
+    if column_one != row_two:
+        print('The operation cannot be performed.\n')
+        return menu()
+    else:
+        result = [[0 for i in range(int(column_two))] for j in range(int(row_one))]
+        for i in range(int(row_one)):
+            for j in range(int(column_two)):
+                for k in range(int(column_one)):
+                    try:
+                        result[i][j] = result[i][j] + int(matrix_one[i][k]) * int(matrix_two[k][j])
+                    except ValueError:
+                        result[i][j] = float(result[i][j]) + float(matrix_one[i][k]) * float(matrix_two[k][j])
+        return output(result)
+
+
+def matrix_transpose(option):
+    row, col = input('Enter size of matrix: ').split()
+    matrix = []
+    print('Enter matrix: ')
+    for i in range(0, int(row)):
+        matrix.append(input().split())
+    # main diagonal
+    if option == '1':
+        t_matrix = zip(*matrix)
+        return output(t_matrix)
+    # side diagonal
+    elif option == '2':
+        t_matrix = [[matrix[j][i] for j in range((int(col)-1), -1, -1)] for i in range((int(row)-1), -1, -1)]
+        return output(t_matrix)
+    # vertical line
+    elif option == '3':
+        t_matrix = [[matrix[i][j] for j in range((int(col)) - 1, -1, -1)] for i in range(int(row))]
+        return output(t_matrix)
+    # horizontal line
+    elif option == '4':
+        t_matrix = [[matrix[i][j] for j in range(int(col))] for i in range((int(row) - 1), -1, -1)]
+        return output(t_matrix)
+
+
+menu()
